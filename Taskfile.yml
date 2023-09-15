@@ -1,0 +1,31 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  tidy: go mod tidy
+
+  build:
+    deps: [tidy]
+    sources:
+      - ./cmd/**/*.go
+      - ./internal/**/*.go
+      - ./content/**/*.go
+      - ./content/**/*.css 
+      - ./content/**/*.html
+    generates:
+      - ./bin/app
+    cmds:
+      - go build -o ./bin/app ./cmd/app
+
+  run:
+    deps: [build]
+    cmds:
+      - ./bin/app
+
+  tailwind:
+    cmds:
+      - tailwind -i ./content/src/main.tailwind.css -o ./content/static/css/main.css --watch
